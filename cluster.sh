@@ -46,6 +46,9 @@ while [ "$1" != "" ]; do
             		shift
             		target_file="$1"
             		;;
+            	refresh)
+            		action="refresh"
+            		;;
             	*)
             		echo "Error: Unknown action"
             		exit 1
@@ -74,6 +77,15 @@ elif [[ "$action" = "put" || "$action" = "get" ]]; then
 	else
 		SERV="$COPYSERVERS"
 	fi
+elif [ "$action" = "refresh" ]; then
+	SERV="$SERVERS $COPYSERVERS"
+	for s in $SERV; do
+		if [ "$verbose" = "1" ]; then
+			echo "Refresh $s"
+		fi
+		ssh $USER@$s "exit"
+	done
+	exit 0
 fi
 
 MIN=1; until (( (MIN<<=1) < 0 )) ;do :;done
