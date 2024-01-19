@@ -95,10 +95,6 @@ opt=
 opt_user=$MAX
 re_num='^[0-9]+$'
 
-echo -n "Password: "
-read -s password
-echo
-
 for s in $SERV; do
 	cur_user=$(sshpass -p "$password" ssh $USER@$s "users | tr ' ' '\n' | wc -l")
 	if [[ $cur_user =~ $re_num ]]; then
@@ -119,10 +115,10 @@ if [ "$avail" = "1" ]; then
 fi
 
 if [ "$action" = "login" ]; then
-	sshpass -p "$password" ssh $USER@$opt
+	ssh $USER@$opt
 elif [ "$action" = "put" ]; then
-	sshpass -p "$password" scp "$source_file" "${USER}@${opt}:${target_file}"
+	scp "$source_file" "${USER}@${opt}:${target_file}"
 elif [ "$action" = "get" ]; then
-	sshpass -p "$password" scp "${USER}@${opt}:${source_file}" "$target_file"
+	scp "${USER}@${opt}:${source_file}" "$target_file"
 fi
 
